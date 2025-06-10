@@ -287,9 +287,53 @@ const dicionarioDeSinonimos = {
 // ========================================================================
 
 
+// api/buscar-categoria.js
+
+// ========================================================================
+// IDs DAS SUAS CATEGORIAS PRINCIPAIS (PAI DE TODAS)
+// POR FAVOR, CONFIRME SE ESTES NÚMEROS ESTÃO CORRETOS NO SEU PAINEL
+// ========================================================================
+const ID_CATEGORIA_NACIONAL = 8155362;
+const ID_CATEGORIA_PREMIUM = 14215331;
+// ========================================================================
+
+const dicionarioDeSinonimos = {
+  // SEU DICIONÁRIO COMPLETO VEM AQUI...
+  // (O mesmo dicionário gigante da resposta anterior)
+  'tn': 'Air Max TN',
+  'force': 'Air Force',
+  'air force 1': 'Air Force',
+  'dunk low': 'Dunk',
+  // etc...
+};
+
+// ========================================================================
+// FUNÇÃO AUXILIAR PARA VERIFICAR A "LINHAGEM" DA CATEGORIA
+// ========================================================================
+function isDescendenteDe(categoriaId, categoriaPaiId, todasAsCategorias) {
+  let categoriaAtual = todasAsCategorias.find(c => c.id === categoriaId);
+  if (!categoriaAtual) return false;
+
+  // Loop para "subir" na árvore de categorias
+  while (categoriaAtual) {
+    // Se o pai da categoria atual for o ID que procuramos, é descendente!
+    if (categoriaAtual.parent === categoriaPaiId) {
+      return true;
+    }
+    // Se chegamos na raiz (parent é nulo) e não achamos, não é descendente
+    if (!categoriaAtual.parent) {
+      return false;
+    }
+    // Move para a próxima categoria "pai" para continuar a busca
+    categoriaAtual = todasAsCategorias.find(c => c.id === categoriaAtual.parent);
+  }
+  return false;
+}
+// ========================================================================
+
+
 export default async function handler(request, response) {
   const modeloDoUsuario = (request.query.modelo || '').toLowerCase();
-
   if (!modeloDoUsuario) {
     return response.status(400).json({ error: 'O parâmetro "modelo" é obrigatório.' });
   }
@@ -300,7 +344,7 @@ export default async function handler(request, response) {
     const nuvemShopResponse = await fetch('https://api.nuvemshop.com.br/v1/905119/categories', {
       headers: {
         'Authentication': 'bearer 972ade7aa8a494d58d2dbc868f5a6e26ee0a4472', // GARANTA QUE SEU TOKEN ESTÁ CORRETO
-        'User-Agent': 'GenIA (marcos.sei.w@gmail.com)' // GARANTA QUE SEU USER-AGENT ESTÁ CORRETO
+        'User-Agent': 'GenIA (marcos.sei.w@gmail.com)' 
       }
     });
     const todasAsCategorias = await nuvemShopResponse.json();
@@ -308,7 +352,6 @@ export default async function handler(request, response) {
     const construirUrl = (categoriaId, categorias) => {
       let categoriaAtual = categorias.find(c => c.id === categoriaId);
       if (!categoriaAtual) return null;
-
       let pathParts = [];
       while (categoriaAtual) {
         if (categoriaAtual.handle && categoriaAtual.handle.pt) {
@@ -316,18 +359,21 @@ export default async function handler(request, response) {
         }
         if (categoriaAtual.parent) {
           categoriaAtual = categorias.find(c => c.id === categoriaAtual.parent);
-        } else {
-          break;
-        }
+        } else { break; }
       }
       return `https://www.tenismogi.com/${pathParts.join('/')}`;
     };
     
-    const nomeNacional = nomeOficial;
-    const nomePremium = `${nomeOficial} Premium`;
+    // ========================================================================
+    // NOVA LÓGICA DE BUSCA (MAIS INTELIGENTE)
+    // ========================================================================
+    // 1. Encontra TODAS as categorias que correspondem ao nome (pode haver mais de uma)
+    const candidatos = todasAsCategorias.filter(c => c.name.pt.toLowerCase() === nomeOficial.toLowerCase());
 
-    const categoriaNacional = todasAsCategorias.find(c => c.name.pt.toLowerCase() === nomeNacional.toLowerCase());
-    const categoriaPremium = todasAsCategorias.find(c => c.name.pt.toLowerCase() === nomePremium.toLowerCase());
+    // 2. Agora, para cada candidato, verificamos sua linhagem
+    const categoriaNacional = candidatos.find(c => isDescendenteDe(c.id, ID_CATEGORIA_NACIONAL, todasAsCategorias));
+    const categoriaPremium = candidatos.find(c => isDescendenteDe(c.id, ID_CATEGORIA_PREMIUM, todasAsCategorias));
+    // ========================================================================
 
     const resultado = {
       nacional_disponivel: !!categoriaNacional,
