@@ -12,7 +12,7 @@ export default async function handler(request, response) {
     // Chama a API da Nuvemshop para pegar TODAS as categorias
     const nuvemShopResponse = await fetch('https://api.nuvemshop.com.br/v1/905119/categories', {
       headers: {
-        'Authentication': 'bearer 972ade7aae8a494d58d98d89e2730b2067d01d4a', // Seu token
+        'Authentication': 'bearer 972ade7aa8a494d58d2dbc868f5a6e26ee0a4472', // Seu token
         'User-Agent': 'GenIA (marcos.sei.w@gmail.com)' // Seu User Agent
       }
     });
