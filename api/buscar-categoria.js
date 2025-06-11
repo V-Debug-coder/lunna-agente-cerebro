@@ -64,7 +64,6 @@ const dicionarioDeSinonimos = {
 // ========================================================================
 
 
-// Função auxiliar para verificar a linhagem da categoria
 function isDescendenteDe(categoriaId, categoriaPaiId, todasAsCategoriasMap) {
   let currentCategory = todasAsCategoriasMap.get(categoriaId);
   const visitados = new Set();
@@ -78,19 +77,27 @@ function isDescendenteDe(categoriaId, categoriaPaiId, todasAsCategoriasMap) {
   return false;
 }
 
-// Função auxiliar para construir a URL completa da categoria
+// ========================================================================
+// FUNÇÃO CONSTRUIRURL CORRIGIDA E FINAL
+// ========================================================================
 function construirUrl(categoriaId, todasAsCategoriasMap) {
   let categoriaAtual = todasAsCategoriasMap.get(categoriaId);
   const pathParts = [];
   const visitados = new Set();
+  
   while (categoriaAtual) {
     if (visitados.has(categoriaAtual.id)) break; 
     visitados.add(categoriaAtual.id);
+    
     if (categoriaAtual.handle && categoriaAtual.handle.pt) {
       pathParts.unshift(categoriaAtual.handle.pt);
     }
-    if (!categoriaAtual.parent || categoriaAtual.parent === 0) break;
-    categoriaAtual = todasAsCategoriasMap.get(categoriaAtual.parent);
+
+    if (categoriaAtual.parent && categoriaAtual.parent !== 0) {
+      categoriaAtual = todasAsCategoriasMap.get(categoriaAtual.parent);
+    } else {
+      break; // Para quando chegar na raiz
+    }
   }
   return `https://www.tenismogi.com/${pathParts.join('/')}`;
 }
