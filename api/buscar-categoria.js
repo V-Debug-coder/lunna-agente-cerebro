@@ -86,6 +86,8 @@ const dicionarioDeSinonimos = {
   'ultra ranger': 'Ultra Ranger', 'ultra range': 'Ultra Ranger', 'ranger': 'Ultra Ranger', 'ultra rang': 'Ultra Ranger',
   // ULTRA BOOST
   'ultra boost': 'Ultra Boost', 'ultra bost': 'Ultra Boost',
+  // AIR MAX TN
+  'tn': 'AIR MAX TN', 'air max tn': 'AIR MAX TN', 'TS': 'AIR MAX TN', 'ts': 'AIR MAX TN', 
   // VERT
   'vert': 'Vert', 'veja': 'Vert', 'verti': 'Vert', 'verte': 'Vert',
   // ROUPAS E ACESSÓRIOS
