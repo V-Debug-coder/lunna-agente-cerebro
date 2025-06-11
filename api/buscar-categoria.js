@@ -103,7 +103,7 @@ function isDescendenteDe(categoriaId, categoriaPaiId, todasAsCategoriasMap) {
   let currentCategory = todasAsCategoriasMap.get(categoriaId);
   const visitados = new Set();
   while (currentCategory) {
-    if (visitados.has(currentCategory.id)) return false; 
+    if (visitados.has(currentCategory.id)) return false;
     visitados.add(currentCategory.id);
     if (currentCategory.id === categoriaPaiId || currentCategory.parent === categoriaPaiId) return true;
     if (!currentCategory.parent || currentCategory.parent === 0) return false;
@@ -112,13 +112,12 @@ function isDescendenteDe(categoriaId, categoriaPaiId, todasAsCategoriasMap) {
   return false;
 }
 
-// Função auxiliar para construir a URL completa da categoria
 function construirUrl(categoriaId, todasAsCategoriasMap) {
   let categoriaAtual = todasAsCategoriasMap.get(categoriaId);
   const pathParts = [];
   const visitados = new Set();
   while (categoriaAtual) {
-    if (visitados.has(categoriaAtual.id)) break; 
+    if (visitados.has(categoriaAtual.id)) break;
     visitados.add(categoriaAtual.id);
     if (categoriaAtual.handle && categoriaAtual.handle.pt) {
       pathParts.unshift(categoriaAtual.handle.pt);
@@ -140,8 +139,10 @@ export default async function handler(request, response) {
   try {
     const nuvemShopResponse = await fetch('https://api.nuvemshop.com.br/v1/905119/categories', {
       headers: {
-        // TOKEN CORRETO INSERIDO AQUI
-        'Authentication': 'bearer 972ade7aae8a494d58d2dbc868f5a6e26ee0a4472',
+        // ========================================================================
+        // MUDANÇA CRÍTICA: AGORA ELE LÊ O TOKEN DA "GAVETA DE SEGREDOS" DA VERCEL
+        // ========================================================================
+        'Authentication': `bearer ${process.env.NUVEMSHOP_API_TOKEN}`,
         'User-Agent': 'GenIA (marcos.sei.w@gmail.com)'
       }
     });
