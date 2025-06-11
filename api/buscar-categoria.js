@@ -99,53 +99,36 @@ const dicionarioDeSinonimos = {
 
 };
 
-// ========================================================================
-// FUNÇÕES AUXILIARES COM A LÓGICA FINAL E CORRIGIDA
-// ========================================================================
+// Função auxiliar para verificar a linhagem da categoria
 function isDescendenteDe(categoriaId, categoriaPaiId, todasAsCategoriasMap) {
   let currentCategory = todasAsCategoriasMap.get(categoriaId);
   const visitados = new Set();
-
   while (currentCategory) {
-    if (visitados.has(currentCategory.id)) return false; // Evita loop infinito
+    if (visitados.has(currentCategory.id)) return false; 
     visitados.add(currentCategory.id);
-
-    // Verifica se a categoria atual é a própria categoria pai
-    if (currentCategory.id === categoriaPaiId) {
-        return true;
-    }
-    
-    // Se chegamos na raiz da árvore, para a busca
-    if (!currentCategory.parent || currentCategory.parent === 0) {
-      return false;
-    }
-    
-    // Move um nível para cima na árvore
+    if (currentCategory.id === categoriaPaiId || currentCategory.parent === categoriaPaiId) return true;
+    if (!currentCategory.parent || currentCategory.parent === 0) return false;
     currentCategory = todasAsCategoriasMap.get(currentCategory.parent);
   }
   return false;
 }
 
+// Função auxiliar para construir a URL completa da categoria
 function construirUrl(categoriaId, todasAsCategoriasMap) {
   let categoriaAtual = todasAsCategoriasMap.get(categoriaId);
   const pathParts = [];
   const visitados = new Set();
-  
   while (categoriaAtual) {
     if (visitados.has(categoriaAtual.id)) break; 
     visitados.add(categoriaAtual.id);
-    
     if (categoriaAtual.handle && categoriaAtual.handle.pt) {
       pathParts.unshift(categoriaAtual.handle.pt);
     }
-
     if (!categoriaAtual.parent || categoriaAtual.parent === 0) break;
-    
     categoriaAtual = todasAsCategoriasMap.get(categoriaAtual.parent);
   }
   return `https://www.tenismogi.com/${pathParts.join('/')}`;
 }
-// ========================================================================
 
 export default async function handler(request, response) {
   const modeloDoUsuario = (request.query.modelo || '').toLowerCase();
@@ -185,7 +168,10 @@ export default async function handler(request, response) {
       nacional_disponivel: !!categoriaNacional,
       nacional_url: categoriaNacional ? construirUrl(categoriaNacional.id, categoriasMap) : null,
       premium_disponivel: !!categoriaPremium,
-      premium_url: premiumPremium ? construirUrl(categoriaPremium.id, categoriasMap) : null,
+      // ========================================================================
+      // CORREÇÃO FINAL: A variável aqui é 'categoriaPremium', não 'premiumPremium'
+      // ========================================================================
+      premium_url: categoriaPremium ? construirUrl(categoriaPremium.id, categoriasMap) : null,
     };
 
     return response.status(200).json(resultado);
