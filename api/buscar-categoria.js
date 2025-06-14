@@ -5,6 +5,13 @@ const ID_CATEGORIA_PREMIUM = 14215331;
 
 // SUPER-GLOSSÁRIO GERADO POR IA (BASEADO NO SEU CATÁLOGO COMPLETO)
 const dicionarioDeSinonimos = {
+   
+  // Variações completas que a IA de imagem pode gerar
+  'nike air force': 'AIR FORCE',
+  'nike dunk low': 'DUNK LOW',
+  'adidas superstar': 'SUPERSTAR',
+  'adidas campus premium': 'ADIDAS CAMPUS PREMIUM ',
+  
   // --- MARCAS PRINCIPAIS ---
   'nike': 'NIKE', 'naiki': 'NIKE', 'naike': 'NIKE', 'nik': 'NIKE',
   'adidas': 'ADIDAS', 'adida': 'ADIDAS', 'addidas': 'ADIDAS', 'adidasd': 'ADIDAS',
