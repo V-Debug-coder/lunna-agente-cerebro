@@ -84,9 +84,6 @@ const dicionarioDeSinonimos = {
   'camiseta': 'Camiseta',
 };
 
-// ========================================================================
-// FUNÇÕES AUXILIARES (LÓGICA FINAL E CORRIGIDA)
-// ========================================================================
 function isDescendenteDe(categoriaId, categoriaPaiId, todasAsCategoriasMap) {
   let currentCategory = todasAsCategoriasMap.get(categoriaId);
   const visitados = new Set();
@@ -116,9 +113,6 @@ function construirUrl(categoriaId, todasAsCategoriasMap) {
   return `https://www.tenismogi.com/${pathParts.join('/')}`;
 }
 
-// ========================================================================
-// FUNÇÃO PRINCIPAL (HANDLER)
-// ========================================================================
 export default async function handler(request, response) {
   const modeloDoUsuario = (request.query.modelo || '').toLowerCase();
   if (!modeloDoUsuario) {
@@ -156,15 +150,16 @@ export default async function handler(request, response) {
     const nomeNacionalBase = nomeOficial;
     const nomePremiumBase = `${nomeOficial} Premium`;
 
+    // LÓGICA DE BUSCA MELHORADA: Adiciona .trim() para remover espaços extras
     const nomeBuscaPremium = nomeOficial.toLowerCase().includes('premium') ? nomeOficial : nomePremiumBase;
 
     const candidatos = todasAsCategorias.filter(c => 
-      c.name.pt.toLowerCase() === nomeNacionalBase.toLowerCase() || 
-      c.name.pt.toLowerCase() === nomeBuscaPremium.toLowerCase()
+      c.name.pt.trim().toLowerCase() === nomeNacionalBase.toLowerCase() || 
+      c.name.pt.trim().toLowerCase() === nomeBuscaPremium.toLowerCase()
     );
     
-    const categoriaNacional = candidatos.find(c => c.name.pt.toLowerCase() === nomeNacionalBase.toLowerCase() && isDescendenteDe(c.id, ID_CATEGORIA_NACIONAL, categoriasMap));
-    const categoriaPremium = candidatos.find(c => c.name.pt.toLowerCase() === nomeBuscaPremium.toLowerCase() && isDescendenteDe(c.id, ID_CATEGORIA_PREMIUM, categoriasMap));
+    const categoriaNacional = candidatos.find(c => c.name.pt.trim().toLowerCase() === nomeNacionalBase.toLowerCase() && isDescendenteDe(c.id, ID_CATEGORIA_NACIONAL, categoriasMap));
+    const categoriaPremium = candidatos.find(c => c.name.pt.trim().toLowerCase() === nomeBuscaPremium.toLowerCase() && isDescendenteDe(c.id, ID_CATEGORIA_PREMIUM, categoriasMap));
 
     const resultado = {
       nacional_disponivel: !!categoriaNacional,
