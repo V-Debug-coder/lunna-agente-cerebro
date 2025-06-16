@@ -14,7 +14,7 @@ const dicionarioDeSinonimos = {
   'puma': 'PUMA', 'pumba': 'PUMA', 'pum': 'PUMA',
   'all star': 'ALL STAR', 'allstar': 'ALL STAR', 'al estar': 'ALL STAR', 'converce': 'ALL STAR', 'converse': 'ALL STAR', 'all star converse': 'ALL STAR', 'au star': 'ALL STAR', 'austar': 'ALL STAR',
   'mizuno': 'MIZUNO', 'misuno': 'MIZUNO', 'mizunu': 'MIZUNO', 'misunu': 'MIZUNO', 'mizino': 'MIZUNO',
-  'new balance': 'NEW BALANCE', '9060': 'NEW BALANCE', '530': 'NEW BALANCE', '720': 'NEW BALANCE', 'novo balanço': 'NEW BALANCE', 'nil balance': 'NEW BALANCE', 'nb': 'NEW BALANCE', 'newbalanci': 'NEW BALANCE',
+  'new balance': 'NEW BALANCE', '9060': 'NEW BALANCE PREMIUM', '530': 'NEW BALANCE PREMIUM', '720': 'NEW BALANCE PREMIUM', 'novo balanço': 'NEW BALANCE', 'nil balance': 'NEW BALANCE', 'nb': 'NEW BALANCE', 'newbalanci': 'NEW BALANCE',
   'vert': 'VERT', 'veja': 'VERT', 'verti': 'VERT', 'verte': 'VERT', 'verty': 'VERT', 'tenis veja': 'VERT',
   'tesla': 'TESLA PREMIUM', 'tezla': 'TESLA PREMIUM',
   'louis vuitton': 'LOUIS VUITTON', 'louis viton': 'LOUIS VUITTON', 'lv': 'LOUIS VUITTON', 'vitton': 'LOUIS VUITTON', 'vuitton': 'LOUIS VUITTON',
