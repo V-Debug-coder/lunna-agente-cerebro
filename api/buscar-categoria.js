@@ -1,16 +1,6 @@
 // api/buscar-categoria.js 
 const ID_CATEGORIA_NACIONAL = 8155362;
 const ID_CATEGORIA_PREMIUM = 14215331;
-
-const dicionarioDeSinonimos = {
-  // MAPEAMENTO ESPECIAL PARA INFORMAÇÕES DE REVENDA
-  'revenda': 'INFO_REVENDA',
-  'revendedor': 'INFO_REVENDA',
-  'revender': 'INFO_REVENDA',
-  'drop': 'INFO_REVENDA',
-  'dropshipping': 'INFO_REVENDA',
-  'drop shipping': 'INFO_REVENDA',
-
   
   // ========================================================
   // DICIONÁRIO DEFINITIVO (SEU GLOSSÁRIO + IA)
@@ -91,9 +81,6 @@ const dicionarioDeSinonimos = {
   'calça cargo': 'Calça Cargo',
   'camiseta': 'Camiseta',
 };
-
-// TEXTO COMPLETO SOBRE REVENDA
-const textoDeRevenda = "Olá, futuro(a) revendedor(a)! Ficamos felizes em ter você aqui.\n\nA Tenis Mogi desenvolveu a maior plataforma de revenda do mercado. Você vai poder revender nossos pares a partir de R$70,00, sem ter quantidade mínima para adquirir. 🔥\n\nVocê irá montar a sua loja e adquirir os pares, seja no formato atacado ou dropshipping, em um site exclusivamente para revendedores. Você fará seus pedidos e enviaremos direto para o seu cliente ou para você. Também temos a opção de retirada em nossas lojas no centro de Mogi das Cruzes ou Suzano. 🔥\n\nVocê irá pagar uma taxa ANUAL de apenas R$180,00 e ter acesso à nossa plataforma de revenda! E de brinde, fizemos um minicurso que vai te ensinar todas as nossas melhores estratégias para começar a vender do zero na internet.🔥\n\nVenha já fazer parte dessa equipe! ☺️\n**PIX para inscrição:** 53.743.015/0001-06 (LWC CALÇADOS LTDA)\n\nApós o pagamento, por favor, nos envie o comprovante do PIX junto com seus dados para cadastro:\n- NOME COMPLETO\n- CPF\n- ENDEREÇO\n- NOME DA SUA LOJA\n- E-MAIL VÁLIDO\n- WHATSAPP";
 
 // ========================================================================
 // PARTE 2: FUNÇÕES AUXILIARES
