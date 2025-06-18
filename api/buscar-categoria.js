@@ -1,9 +1,17 @@
-// api/buscar-categoria.js - VERSÃO DE PRODUÇÃO FINAL COM DICIONÁRIO COMPLETO E COMBINADO 
-
+// api/buscar-categoria.js 
 const ID_CATEGORIA_NACIONAL = 8155362;
 const ID_CATEGORIA_PREMIUM = 14215331;
 
 const dicionarioDeSinonimos = {
+  // MAPEAMENTO ESPECIAL PARA INFORMAÇÕES DE REVENDA
+  'revenda': 'INFO_REVENDA',
+  'revendedor': 'INFO_REVENDA',
+  'revender': 'INFO_REVENDA',
+  'drop': 'INFO_REVENDA',
+  'dropshipping': 'INFO_REVENDA',
+  'drop shipping': 'INFO_REVENDA',
+
+  
   // ========================================================
   // DICIONÁRIO DEFINITIVO (SEU GLOSSÁRIO + IA)
   // ========================================================
@@ -84,6 +92,13 @@ const dicionarioDeSinonimos = {
   'camiseta': 'Camiseta',
 };
 
+// TEXTO COMPLETO SOBRE REVENDA
+const textoDeRevenda = "Olá, futuro(a) revendedor(a)! Ficamos felizes em ter você aqui.\n\nA Tenis Mogi desenvolveu a maior plataforma de revenda do mercado. Você vai poder revender nossos pares a partir de R$70,00, sem ter quantidade mínima para adquirir. 🔥\n\nVocê irá montar a sua loja e adquirir os pares, seja no formato atacado ou dropshipping, em um site exclusivamente para revendedores. Você fará seus pedidos e enviaremos direto para o seu cliente ou para você. Também temos a opção de retirada em nossas lojas no centro de Mogi das Cruzes ou Suzano. 🔥\n\nVocê irá pagar uma taxa ANUAL de apenas R$180,00 e ter acesso à nossa plataforma de revenda! E de brinde, fizemos um minicurso que vai te ensinar todas as nossas melhores estratégias para começar a vender do zero na internet.🔥\n\nVenha já fazer parte dessa equipe! ☺️\n**PIX para inscrição:** 53.743.015/0001-06 (LWC CALÇADOS LTDA)\n\nApós o pagamento, por favor, nos envie o comprovante do PIX junto com seus dados para cadastro:\n- NOME COMPLETO\n- CPF\n- ENDEREÇO\n- NOME DA SUA LOJA\n- E-MAIL VÁLIDO\n- WHATSAPP";
+
+// ========================================================================
+// PARTE 2: FUNÇÕES AUXILIARES
+// ========================================================================
+
 function isDescendenteDe(categoriaId, categoriaPaiId, todasAsCategoriasMap) {
   let currentCategory = todasAsCategoriasMap.get(categoriaId);
   const visitados = new Set();
@@ -113,6 +128,9 @@ function construirUrl(categoriaId, todasAsCategoriasMap) {
   return `https://www.tenismogi.com/${pathParts.join('/')}`;
 }
 
+// ========================================================================
+// PARTE 3: FUNÇÃO PRINCIPAL (HANDLER)
+// ========================================================================
 export default async function handler(request, response) {
   const modeloDoUsuario = (request.query.modelo || '').toLowerCase();
   if (!modeloDoUsuario) {
@@ -121,6 +139,16 @@ export default async function handler(request, response) {
 
   const nomeOficial = dicionarioDeSinonimos[modeloDoUsuario] || modeloDoUsuario;
 
+  // LÓGICA DO "CAVALO DE TROIA" PARA REVENDA
+  if (nomeOficial === 'INFO_REVENDA') {
+    return response.status(200).json({
+      is_special_info: true,
+      title: "Seja um Revendedor Tênis Mogi!",
+      content: textoDeRevenda
+    });
+  }
+
+  // SE NÃO FOR REVENDA, CONTINUA COM A BUSCA NORMAL DE PRODUTOS
   try {
     const headers = {
       'Authentication': `bearer ${process.env.NUVEMSHOP_API_TOKEN}`,
@@ -150,7 +178,6 @@ export default async function handler(request, response) {
     const nomeNacionalBase = nomeOficial;
     const nomePremiumBase = `${nomeOficial} Premium`;
 
-    // LÓGICA DE BUSCA MELHORADA: Adiciona .trim() para remover espaços extras
     const nomeBuscaPremium = nomeOficial.toLowerCase().includes('premium') ? nomeOficial : nomePremiumBase;
 
     const candidatos = todasAsCategorias.filter(c => 
@@ -166,6 +193,7 @@ export default async function handler(request, response) {
       nacional_url: categoriaNacional ? construirUrl(categoriaNacional.id, categoriasMap) : null,
       premium_disponivel: !!categoriaPremium,
       premium_url: categoriaPremium ? construirUrl(categoriaPremium.id, categoriasMap) : null,
+      is_special_info: false // Adicionando a flag para indicar que não é uma info especial
     };
 
     return response.status(200).json(resultado);
