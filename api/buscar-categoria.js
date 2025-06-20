@@ -1,4 +1,4 @@
-// api/buscar-categoria.js - VERSÃO DE PRODUÇÃO FINAL E LIMPA
+// api/buscar-categoria.js 
 
 const ID_CATEGORIA_NACIONAL = 8155362;
 const ID_CATEGORIA_PREMIUM = 14215331;
