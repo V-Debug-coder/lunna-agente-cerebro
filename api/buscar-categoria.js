@@ -58,7 +58,7 @@ const dicionarioDeSinonimos = {
   'contender': 'Contender',
   'fenty': 'Fenty',
   'invictus 3': 'Invictus 3', 'invictus': 'Invictus 3',
-  'knu skool': 'Knu Skool', 'vans knu': 'Knu Skool',
+  'knu skool': 'Knu Skool', 'vans knu': 'Knu Skool', 'gordinho': 'Knu Skool', 'vans gordinho': 'Knu Skool',
   'old skool': 'Old Skool', 'vans old': 'Old Skool',
   'old skool bota': 'Old Skool Bota',
   'prophecy 8': 'Prophecy 8', 'mizuno prophecy 8': 'Prophecy 8',
