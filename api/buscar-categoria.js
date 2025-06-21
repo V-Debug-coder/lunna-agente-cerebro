@@ -101,14 +101,29 @@ export default async function handler(request, response) {
   if (!modeloDoUsuario) {
     return response.status(400).json({ error: 'O parâmetro "modelo" é obrigatório.' });
   }
-  const nomeOficial = dicionarioDeSinonimos[modeloDoUsuario] || modeloDoUsuario;
+
+  let nomeOficial = modeloDoUsuario;
+  let melhorMatch = '';
+  const chavesOrdenadas = Object.keys(dicionarioDeSinonimos).sort((a, b) => b.length - a.length);
+  for (const alias of chavesOrdenadas) {
+    if (modeloDoUsuario.includes(alias)) {
+      melhorMatch = alias;
+      break; 
+    }
+  }
+  if (melhorMatch) {
+    nomeOficial = dicionarioDeSinonimos[melhorMatch];
+  }
+
   try {
     const headers = {
       'Authentication': `bearer ${process.env.NUVEMSHOP_API_TOKEN}`,
       'User-Agent': 'GenIA (marcos.sei.w@gmail.com)'
     };
+    
     let todasAsCategorias = [];
     let url = 'https://api.nuvemshop.com.br/v1/905119/categories';
+
     while (url) {
       const nuvemShopResponse = await fetch(url, { headers });
       if (!nuvemShopResponse.ok) { throw new Error(`Nuvemshop API respondeu com status: ${nuvemShopResponse.status}`); }
@@ -121,20 +136,30 @@ export default async function handler(request, response) {
         if (nextLink) { url = nextLink.split(';')[0].replace('<', '').replace('>', '').trim(); }
       }
     }
+
     const categoriasMap = new Map(todasAsCategorias.map(c => [c.id, c]));
+    
     const nomeNacionalBase = nomeOficial;
     const nomePremiumBase = `${nomeOficial} Premium`;
     const nomeBuscaPremium = nomeOficial.toLowerCase().includes('premium') ? nomeOficial : nomePremiumBase;
-    const candidatos = todasAsCategorias.filter(c => c.name.pt.trim().toLowerCase() === nomeNacionalBase.toLowerCase() || c.name.pt.trim().toLowerCase() === nomeBuscaPremium.toLowerCase());
+
+    const candidatos = todasAsCategorias.filter(c => 
+      c.name.pt.trim().toLowerCase() === nomeNacionalBase.toLowerCase() || 
+      c.name.pt.trim().toLowerCase() === nomeBuscaPremium.toLowerCase()
+    );
+    
     const categoriaNacional = candidatos.find(c => c.name.pt.trim().toLowerCase() === nomeNacionalBase.toLowerCase() && isDescendenteDe(c.id, ID_CATEGORIA_NACIONAL, categoriasMap));
     const categoriaPremium = candidatos.find(c => c.name.pt.trim().toLowerCase() === nomeBuscaPremium.toLowerCase() && isDescendenteDe(c.id, ID_CATEGORIA_PREMIUM, categoriasMap));
+
     const resultado = {
       nacional_disponivel: !!categoriaNacional,
       nacional_url: categoriaNacional ? construirUrl(categoriaNacional.id, categoriasMap) : null,
       premium_disponivel: !!categoriaPremium,
       premium_url: categoriaPremium ? construirUrl(categoriaPremium.id, categoriasMap) : null,
     };
+    
     return response.status(200).json(resultado);
+
   } catch (error) {
     return response.status(500).json({ error: 'Falha ao processar a solicitação.', details: error.message });
   }
