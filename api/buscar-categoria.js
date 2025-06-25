@@ -71,7 +71,7 @@ function isDescendenteDe(categoriaId, categoriaPaiId, todasAsCategoriasMap) {
   let currentCategory = todasAsCategoriasMap.get(categoriaId);
   const visitados = new Set();
   while (currentCategory) {
-    if (visitados.has(currentCategory.id)) return false; 
+    if (visitados.has(currentCategory.id)) return false;
     visitados.add(currentCategory.id);
     if (currentCategory.id === categoriaPaiId || currentCategory.parent === categoriaPaiId) return true;
     if (!currentCategory.parent || currentCategory.parent === 0) return false;
@@ -85,7 +85,7 @@ function construirUrl(categoriaId, todasAsCategoriasMap) {
   const pathParts = [];
   const visitados = new Set();
   while (categoriaAtual) {
-    if (visitados.has(categoriaAtual.id)) break; 
+    if (visitados.has(categoriaAtual.id)) break;
     visitados.add(categoriaAtual.id);
     if (categoriaAtual.handle && categoriaAtual.handle.pt) {
       pathParts.unshift(categoriaAtual.handle.pt);
@@ -96,19 +96,48 @@ function construirUrl(categoriaId, todasAsCategoriasMap) {
   return `https://www.tenismogi.com/${pathParts.join('/')}`;
 }
 
+
+// --- LÓGICA PRINCIPAL MODIFICADA ---
 export default async function handler(request, response) {
-  const modeloDoUsuario = (request.query.modelo || '').toLowerCase().trim();
-  if (!modeloDoUsuario) {
+  const termoDeBusca = (request.query.modelo || '').toLowerCase().trim();
+  if (!termoDeBusca) {
     return response.status(400).json({ error: 'O parâmetro "modelo" é obrigatório.' });
   }
 
-  let nomeOficial = modeloDoUsuario;
+  // --- NOVA VERIFICAÇÃO: É UM TAMANHO? ---
+  const tamanhoNumerico = parseInt(termoDeBusca, 10);
+  if (!isNaN(tamanhoNumerico) && tamanhoNumerico >= 18 && tamanhoNumerico <= 45) {
+    
+    const resultadoTamanho = {
+      tipo_busca: 'tamanho',
+      tamanho_pesquisado: tamanhoNumerico,
+      infantil_url: null,
+      nacional_url: null,
+      premium_url: null,
+    };
+
+    if (tamanhoNumerico <= 33) {
+        // É tamanho infantil
+        resultadoTamanho.infantil_url = `https://www.tenismogi.com/infantil/?Tamanho=${tamanhoNumerico}`;
+    } else {
+        // É tamanho adulto
+        resultadoTamanho.nacional_url = `https://www.tenismogi.com/tenis-nacional/?Tamanho=${tamanhoNumerico}`;
+        resultadoTamanho.premium_url = `https://www.tenismogi.com/tenis-premium/?Tamanho=${tamanhoNumerico}`;
+    }
+    
+    // Retorna a resposta formatada para busca por tamanho e encerra a execução
+    return response.status(200).json(resultadoTamanho);
+  }
+  
+  // --- LÓGICA ANTIGA (AGORA PARA BUSCA POR MODELO) ---
+  // Se não for um tamanho, continua com a busca por modelo...
+  let nomeOficial = termoDeBusca;
   let melhorMatch = '';
   const chavesOrdenadas = Object.keys(dicionarioDeSinonimos).sort((a, b) => b.length - a.length);
   for (const alias of chavesOrdenadas) {
-    if (modeloDoUsuario.includes(alias)) {
+    if (termoDeBusca.includes(alias)) {
       melhorMatch = alias;
-      break; 
+      break;
     }
   }
   if (melhorMatch) {
@@ -130,7 +159,7 @@ export default async function handler(request, response) {
       const categoriasDaPagina = await nuvemShopResponse.json();
       todasAsCategorias = todasAsCategorias.concat(categoriasDaPagina);
       const linkHeader = nuvemShopResponse.headers.get('link');
-      url = null; 
+      url = null;
       if (linkHeader) {
         const nextLink = linkHeader.split(',').find(link => link.includes('rel="next"'));
         if (nextLink) { url = nextLink.split(';')[0].replace('<', '').replace('>', '').trim(); }
@@ -152,6 +181,8 @@ export default async function handler(request, response) {
     const categoriaPremium = candidatos.find(c => c.name.pt.trim().toLowerCase() === nomeBuscaPremium.toLowerCase() && isDescendenteDe(c.id, ID_CATEGORIA_PREMIUM, categoriasMap));
 
     const resultado = {
+      tipo_busca: 'modelo', // NOVO: informa o tipo de busca
+      modelo_pesquisado: nomeOficial, // NOVO: informa o modelo que foi buscado
       nacional_disponivel: !!categoriaNacional,
       nacional_url: categoriaNacional ? construirUrl(categoriaNacional.id, categoriasMap) : null,
       premium_disponivel: !!categoriaPremium,
