@@ -1,5 +1,5 @@
 // api/buscar-categoria.js 
-
+// versão 2
 const ID_CATEGORIA_NACIONAL = 8155362;
 const ID_CATEGORIA_PREMIUM = 14215331;
 
