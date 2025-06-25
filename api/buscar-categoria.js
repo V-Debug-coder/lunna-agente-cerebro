@@ -103,7 +103,7 @@ export default async function handler(request, response) {
     return response.status(400).json({ error: 'O parâmetro "modelo" é obrigatório.' });
   }
 
-  // --- NOVA VERIFICAÇÃO: É UM TAMANHO? ---
+  // --- VERIFICAÇÃO DE TAMANHO COM A NOVA REGRA ---
   const tamanhoNumerico = parseInt(termoDeBusca, 10);
   if (!isNaN(tamanhoNumerico) && tamanhoNumerico >= 18 && tamanhoNumerico <= 45) {
     
@@ -112,19 +112,24 @@ export default async function handler(request, response) {
       tamanho_pesquisado: tamanhoNumerico,
       infantil_url: null,
       nacional_url: null,
-      premium_url: null,
+      premium_url: null, // Começa como nulo por padrão
     };
 
     if (tamanhoNumerico <= 33) {
         // É tamanho infantil
         resultadoTamanho.infantil_url = `https://www.tenismogi.com/infantil/?Tamanho=${tamanhoNumerico}`;
     } else {
-        // É tamanho adulto
+        // É tamanho adulto (34 ao 45)
+        // A linha Nacional sempre terá link para adultos.
         resultadoTamanho.nacional_url = `https://www.tenismogi.com/tenis-nacional/?Tamanho=${tamanhoNumerico}`;
-        resultadoTamanho.premium_url = `https://www.tenismogi.com/tenis-premium/?Tamanho=${tamanhoNumerico}`;
+
+        // MUDANÇA AQUI: Adicionamos a condição para a linha Premium.
+        // Só gera o link se o tamanho for 43 ou menor.
+        if (tamanhoNumerico <= 43) {
+            resultadoTamanho.premium_url = `https://www.tenismogi.com/tenis-premium/?Tamanho=${tamanhoNumerico}`;
+        }
     }
     
-    // Retorna a resposta formatada para busca por tamanho e encerra a execução
     return response.status(200).json(resultadoTamanho);
   }
   
