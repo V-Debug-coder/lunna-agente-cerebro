@@ -6,7 +6,7 @@ const dicionarioDeSinonimos = {
   // --- MARCAS PRINCIPAIS ---
   'nike': 'NIKE', 'naiki': 'NIKE', 'naike': 'NIKE', 'nik': 'NIKE',
   'adidas': 'ADIDAS', 'adida': 'ADIDAS', 'addidas': 'ADIDAS', 'adidasd': 'ADIDAS',
-  'puma': 'PUMA', 'pumba': 'PUMA', 'pum': 'PUMA',
+  'puma': 'PUMA', 'pumba': 'PUMA', 'pum': 'PUMA','suede': 'PUMA','sede': 'PUMA','cuede': 'PUMA',
   'all star': 'ALL STAR', 'allstar': 'ALL STAR', 'al estar': 'ALL STAR', 'converce': 'ALL STAR', 'converse': 'ALL STAR', 'all star converse': 'ALL STAR', 'au star': 'ALL STAR', 'austar': 'ALL STAR',
   'mizuno': 'MIZUNO', 'misuno': 'MIZUNO', 'mizunu': 'MIZUNO', 'misunu': 'MIZUNO', 'mizino': 'MIZUNO',
   'new balance': 'NEW BALANCE', 'novo balanço': 'NEW BALANCE', 'nil balance': 'NEW BALANCE', 'nb': 'NEW BALANCE', 'newbalanci': 'NEW BALANCE', '9060': 'New Balance 9060', 'nb 9060': 'New Balance 9060',
@@ -44,7 +44,7 @@ const dicionarioDeSinonimos = {
   'samba premium': 'SAMBA PREMIUM', 'samba': 'SAMBA PREMIUM',
   'yeezy boost premium': 'YEEZY BOOST PREMIUM', 'yeezy': 'YEEZY BOOST PREMIUM',
   'adidas campus premium': 'ADIDAS CAMPUS PREMIUM', 'campus premium': 'ADIDAS CAMPUS PREMIUM', 'campus': 'ADIDAS CAMPUS PREMIUM',
-  'adi 2000 premium': 'ADI 2000 PREMIUM', 'adi2000': 'ADI 2000 PREMIUM',
+  'adi 2000 premium': 'ADI 2000 PREMIUM', 'adi2000': 'ADI 2000 PREMIUM','adi200': 'ADI 2000 PREMIUM','adidas 2000': 'ADI 2000 PREMIUM',
   
   // --- OUTROS MODELOS ---
   'bota': 'BOTA', 'botinha': 'BOTA', 'all star bota': 'BOTA',
