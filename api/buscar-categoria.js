@@ -6,7 +6,7 @@ const dicionarioDeSinonimos = {
   // --- MARCAS PRINCIPAIS ---
   'nike': 'NIKE', 'naiki': 'NIKE', 'naike': 'NIKE', 'nik': 'NIKE',
   'adidas': 'ADIDAS', 'adida': 'ADIDAS', 'addidas': 'ADIDAS', 'adidasd': 'ADIDAS',
-  'puma': 'PUMA', 'pumba': 'PUMA', 'pum': 'PUMA','suede': 'PUMA','sede': 'PUMA','cuede': 'PUMA',
+  'puma': 'PUMA', 'pumba': 'PUMA', 'pum': 'PUMA','suede': 'PUMA','sede': 'PUMA','cuede': 'PUMA', 'fenty': 'PUMA', 'fenti': 'PUMA', 'fentu': 'PUMA', 
   'all star': 'ALL STAR', 'allstar': 'ALL STAR', 'al estar': 'ALL STAR', 'converce': 'ALL STAR', 'converse': 'ALL STAR', 'all star converse': 'ALL STAR', 'au star': 'ALL STAR', 'austar': 'ALL STAR',
   'mizuno': 'MIZUNO', 'misuno': 'MIZUNO', 'mizunu': 'MIZUNO', 'misunu': 'MIZUNO', 'mizino': 'MIZUNO',
   'new balance': 'NEW BALANCE', 'novo balanço': 'NEW BALANCE', 'nil balance': 'NEW BALANCE', 'nb': 'NEW BALANCE', 'newbalanci': 'NEW BALANCE', '9060': 'New Balance 9060', 'nb 9060': 'New Balance 9060',
@@ -55,14 +55,12 @@ const dicionarioDeSinonimos = {
   'puma premium': 'PUMA PREMIUM',
   'vert premium': 'VERT PREMIUM', 'veja premium': 'VERT PREMIUM',
   'contender': 'Contender',
-  'fenty': 'Fenty',
   'invictus 3': 'Invictus 3', 'invictus': 'Invictus 3',
   'knu skool': 'Knu Skool', 'vans knu': 'Knu Skool', 'gordinho': 'Knu Skool', 'vans gordinho': 'Knu Skool',
   'old skool': 'Old Skool', 'vans old': 'Old Skool',
   'old skool bota': 'Old Skool Bota',
   'prophecy 8': 'Prophecy 8', 'mizuno prophecy 8': 'Prophecy 8',
   'rider b': 'Rider B', 'rider': 'Rider B',
-  'puma suede': 'Suede', 'suede': 'Suede',
   'ultra ranger': 'Ultra Ranger', 'ultra range': 'Ultra Ranger',
 };
 
